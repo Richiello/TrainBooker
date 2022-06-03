@@ -1,5 +1,5 @@
 export interface RadioProps {
-  value: string;
-  label: string;
-  size?: 'small' | 'medium';
+	value: string;
+	label: string;
+	size?: 'small' | 'medium';
 }

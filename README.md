@@ -16,5 +16,4 @@ To Visit App when running locally:
 
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-
 See demo here: [https://train-booker.vercel.app/](https://train-booker.vercel.app/)

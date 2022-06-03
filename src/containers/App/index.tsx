@@ -4,13 +4,13 @@ import { BookingForm } from '../BookingForm';
 import { Wrapper } from './styled';
 
 function App() {
-  return (
-    <Wrapper>
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <BookingForm />
-      </LocalizationProvider>
-    </Wrapper>
-  );
+	return (
+		<Wrapper>
+			<LocalizationProvider dateAdapter={AdapterDateFns}>
+				<BookingForm />
+			</LocalizationProvider>
+		</Wrapper>
+	);
 }
 
 export default App;

@@ -1,10 +1,10 @@
 type TrainBooking {
-    destination: String
-    startLocation: String!
-    departure: Date!
-    return: Date
+	destination: String
+	startLocation: String!
+	departure: Date!
+	return: Date
 }
 
 type Query {
-    getAllTrainBookings: [TrainBooking!]
+	getAllTrainBookings: [TrainBooking!]
 }

@@ -1,29 +1,24 @@
 {
-  "env": {
-    "commonjs": true,
-    "es6": true,
-    "node": true
-  },
-  "plugins": [
-    "@typescript-eslint"
-  ],
-  "parser": "@typescript-eslint/parser",
-  "extends": [
-    "eslint:recommended",
-    "prettier",
-    "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended"
-  ],
-  "parserOptions": {
-    "ecmaVersion": "es6"
-  },
-  "rules": {
-    "indent": "off",
-    "no-console": "warn",
-    "quotes": [
-      "error",
-      "single"
-    ],
-    "no-useless-escape": "off"
-  }
+	"env": {
+		"commonjs": true,
+		"es6": true,
+		"node": true
+	},
+	"plugins": ["@typescript-eslint"],
+	"parser": "@typescript-eslint/parser",
+	"extends": [
+		"eslint:recommended",
+		"prettier",
+		"plugin:@typescript-eslint/eslint-recommended",
+		"plugin:@typescript-eslint/recommended"
+	],
+	"parserOptions": {
+		"ecmaVersion": "es6"
+	},
+	"rules": {
+		"indent": "off",
+		"no-console": "warn",
+		"quotes": ["error", "single"],
+		"no-useless-escape": "off"
+	}
 }
