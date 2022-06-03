@@ -1,9 +1,7 @@
-export type DateType = null | Date | string;
-
 export interface DatePickerProps {
   label: string;
-  value: DateType;
-  minDate: DateType;
-  onChange: (newValue: DateType) => void;
+  value: string;
+  minDate: string;
+  onChange: (newValue: Date) => void;
   disabled?: boolean;
 }

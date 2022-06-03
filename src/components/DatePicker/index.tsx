@@ -1,5 +1,7 @@
 import { TextField, TextFieldProps } from '@mui/material';
 import { DatePicker as MUIDatePicker } from '@mui/x-date-pickers/DatePicker';
+import { parseISO } from 'date-fns';
+import { currentDate } from '../../helpers';
 import type { DatePickerProps } from './types';
 
 export const DatePicker = ({
@@ -13,9 +15,11 @@ export const DatePicker = ({
     label={label}
     disabled={disabled}
     mask="____-__-__"
-    value={value ?? new Date()}
-    minDate={minDate}
-    onChange={(newValue) => onChange(newValue)}
+    value={parseISO(value ?? currentDate)}
+    minDate={parseISO(minDate)}
+    onChange={(newValue) => {
+			if(newValue) onChange(newValue)
+		}}
     inputFormat="yyyy-MM-dd"
     renderInput={(params: TextFieldProps) => (
       <TextField

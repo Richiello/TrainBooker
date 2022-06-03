@@ -1,12 +1,15 @@
-import type { DateType } from '../../components';
-
 export type FormTypeValues = 'oneWay' | 'return';
 
-export interface FormValues {
+export interface TrainBooking {
   startLocation: string;
-  departure: DateType;
-  return: DateType;
+  departure: string;
+  return: string;
   destination: string | null;
 }
 
 export type BookingStatusType = 'success' | 'error';
+
+export interface CreateBookingResponse {
+  data: TrainBooking, 
+  error: Error
+}

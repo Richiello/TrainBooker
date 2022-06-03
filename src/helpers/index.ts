@@ -1,4 +1,8 @@
-export const formatDate = (date: Date) => date && date.toISOString().split('T')[0];
+import dayjs from 'dayjs';
+
+export const formatDate = (date: Date) => dayjs(date).format('YYYY-MM-DD');
+
+export const currentDate = dayjs().format('YYYY-MM-DD');
 
 export const validateDate = (date: string | null) => {
   if (date) {

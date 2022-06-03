@@ -1,24 +1,28 @@
-import { DateType } from '../components';
 import { client, q } from '../config/db';
 
 interface TrainBookingInput {
   destination: string | null;
   startLocation: string;
-  departure: DateType;
-  return: DateType | null;
+  departure: string;
+  return: string | null;
+}
+
+export interface ResponseData {
+  [key: string]: any;
 }
 
 export const getAllTrainBookings = client
   .query(q.Paginate(q.Match(q.Ref('indexes/all_train_bookings'))))
-  .then((response: any) => {
-    const getAllDataQuery = response.data.map((res: any) => {
+  .then((response: ResponseData) => {
+    const getAllDataQuery = response.data.map((res: ResponseData) => {
       return q.Get(res);
     });
-    return client.query(getAllDataQuery).then((data: any) => data);
+    return client.query(getAllDataQuery).then((data: ResponseData) => data);
   })
   .catch((error: Error) => console.error('Error: ', error.message));
 
-export const createTrainBooking = (trainBooking: TrainBookingInput) =>
+
+export const createTrainBooking = (trainBooking: TrainBookingInput): ResponseData =>
   client
     .query(
       q.Create(q.Collection('TrainBookings'), {
@@ -27,5 +31,5 @@ export const createTrainBooking = (trainBooking: TrainBookingInput) =>
         }
       })
     )
-    .then(ret => ret)
+    .then((res: ResponseData) => { return {data: res.data, error: res.error }})
     .catch(error => console.error('Error: ', error.message));

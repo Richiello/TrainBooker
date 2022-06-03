@@ -1,14 +1,14 @@
 import { FormControl, Grid, RadioGroup } from '@mui/material';
-import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
+import { FormEvent, useCallback, useEffect, useState } from 'react';
 import { BookingStatusMessage, Button, DatePicker, Radio } from '../../components';
-import type { BookingStatusType, DateType } from '../../components';
-import { createTrainBooking } from '../../api';
-import { formatDate, validateDate } from '../../helpers';
+import type { BookingStatusType } from '../../components';
+import { currentDate, formatDate, validateDate } from '../../helpers';
 import { FormWrapper } from './styled'
-import type { FormTypeValues, FormValues } from './types'
+import type { FormTypeValues, TrainBooking } from './types'
 import { useSearchParams } from '../../hooks';
+import { addTrainBooking } from './service';
 
-const initialFormValues: FormValues = {
+const initialFormValues: TrainBooking = {
   startLocation:  'Stockholm',
   destination: null,
   departure: formatDate(new Date()),
@@ -16,53 +16,44 @@ const initialFormValues: FormValues = {
 };
 
 export const BookingForm = () => {
-  const [formValues, setFormValues] = useState(initialFormValues);
-  const [bookingType, setBookingType] = useState<FormTypeValues>('oneWay');
-  const [bookingStatus, setBookingStatus] = useState<BookingStatusType | null>(null);
+	const [bookingStatus, setBookingStatus] = useState<BookingStatusType | null>(null);
+	const [bookingType, setBookingType] = useState<FormTypeValues>('oneWay');
+  const [formValues, setFormValues] = useState<TrainBooking>(initialFormValues);
   
-  const currentDate = new Date();
-  const searchParams = useSearchParams(['departure', 'return'])
-
-  const isOneWay = bookingType === 'oneWay';
+  const {departure, return: returnDate} = useSearchParams(['departure', 'return'])
 
   const updateFormState = useCallback(
-    (newValues: Record<string, DateType>) =>
-      setFormValues((values) => {
+    (newValues: Record<string, string>) =>
+		setFormValues((values) => {
         return {
           ...values,
-          destination: isOneWay ? null : 'Mexiko',
-          departure: newValues.departure,
-          return: isOneWay ? null : newValues.return
+          ...newValues,
+					destination: bookingType === 'oneWay' ? '' : 'Mexiko',
         };
       }),
-    [],
+    [bookingType],
   );
 
-  useEffect(() => {
+	useEffect(() => {
     setBookingStatus(null)
   }, [formValues]);
 
   useEffect(() => {
     setBookingStatus(null)
-    if (validateDate(searchParams.departure)) {
-      updateFormState({ departure: searchParams.departure });
+    if (validateDate(departure)) {
+      updateFormState({ departure: departure });
     }
-    if (validateDate(searchParams.return)) {
-      updateFormState({ return: searchParams.return });
+    if (validateDate(returnDate)) {
+      updateFormState({ return: returnDate });
     }
-  }, [searchParams, updateFormState]);
+  }, [returnDate, departure, updateFormState]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setBookingStatus(null);
 
-    await createTrainBooking({ ...formValues  }).then((res: any) => {
-      if(res?.data) {
-        setBookingStatus('success')
-      } else if (res?.error) {
-        setBookingStatus('error')
-      }
-    }).catch((_) => setBookingStatus('error'))
+    const response = await addTrainBooking({ ...formValues  })
+    setBookingStatus(response)
   };
 
   return (
@@ -95,7 +86,7 @@ export const BookingForm = () => {
               value={formValues.departure}
               minDate={currentDate}
               onChange={(newValue) =>
-                updateFormState({ departureDate: newValue })
+                updateFormState({ departure: formatDate(newValue) })
               }
             />
           </Grid>
@@ -105,7 +96,7 @@ export const BookingForm = () => {
               disabled={bookingType === 'oneWay'}
               minDate={formValues.departure}
               value={formValues.return}
-              onChange={(newValue) => updateFormState({ return: newValue })}
+              onChange={(newValue) => updateFormState({ return: formatDate(newValue) })}
             />
           </Grid>
           <Grid item>
